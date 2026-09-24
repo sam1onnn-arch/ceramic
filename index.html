@@ -1,0 +1,1042 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Глина и пепел</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 32 32%27%3E%3Crect width=%2732%27 height=%2732%27 fill=%27%230d0a08%27/%3E%3Cpath d=%27M16 3.2a12.8 12.8 0 1 0 11.6 7.4%27 fill=%27none%27 stroke=%27%23c9a36a%27 stroke-width=%272.4%27 stroke-linecap=%27round%27/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@1,400;1,500&display=swap">
+<style>
+:root{
+  color-scheme:dark;
+  --bg:#14100d;
+  --bg-deep:#0d0a08;
+  --surface:#1b150f;
+  --pit:#0f0b08;
+  --wood:#261c14;
+  --wood-hi:#372819;
+  --text:#eee7db;
+  --muted:#aaa090;
+  --faint:#8a8072;
+  --line:rgba(238,231,219,.13);
+  --line-2:rgba(238,231,219,.28);
+  --paper:#e7e1d6;
+  --paper-2:#dbd3c5;
+  --ink:#1a1511;
+  --ink-muted:#5c5447;
+  --ink-line:rgba(26,21,17,.2);
+  --bronze:#c9a36a;
+  --matcha:#a8b46a;
+  --gut:clamp(16px,4vw,56px);
+  --maxw:1240px;
+  --sans:"Manrope","Segoe UI",system-ui,-apple-system,sans-serif;
+  --serif:"Playfair Display",Georgia,"Times New Roman",serif;
+  --grain:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='n' x='0' y='0' width='100%25' height='100%25'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.006 .5' numOctaves='3' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .03  0 0 0 0 .018  0 0 0 0 .008  1.7 0 0 0 -.55'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
+h1,h2,h3,p,ul,ol,dl,dd,figure{margin:0}
+ul,ol{padding:0;list-style:none}
+h1,h2,h3{text-wrap:balance}
+p{text-wrap:pretty}
+a{color:inherit}
+img{display:block;max-width:100%;height:auto}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+::selection{background:var(--bronze);color:var(--bg-deep)}
+:focus-visible{outline:2px solid var(--bronze);outline-offset:3px}
+section[id]{scroll-margin-top:72px}
+
+h1{font-weight:800;font-size:clamp(2.4rem,5.4vw,4.7rem);line-height:.98;letter-spacing:-.035em;text-transform:uppercase}
+h2{font-weight:700;font-size:clamp(1.9rem,4vw,3.2rem);line-height:1.06;letter-spacing:-.03em}
+h3{font-weight:700;font-size:1.05rem;line-height:1.3;letter-spacing:-.01em}
+h1 em,h2 em{font-family:var(--serif);font-style:italic;font-weight:400;text-transform:none;letter-spacing:-.01em;font-size:1.06em}
+
+.wrap{max-width:var(--maxw);margin-inline:auto;padding-inline:var(--gut)}
+.sec{padding-block:clamp(64px,8vw,112px)}
+.sub{margin-top:16px;max-width:56ch;color:var(--muted);font-size:1.05rem}
+.paper{background:var(--paper);color:var(--ink);color-scheme:light}
+.paper .sub{color:var(--ink-muted)}
+.deep{background:var(--bg-deep)}
+
+/* кнопки */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:48px;padding:0 24px;border:1px solid var(--text);background:var(--text);color:var(--bg-deep);font-size:13px;font-weight:700;line-height:1;letter-spacing:.09em;text-transform:uppercase;text-decoration:none;border-radius:2px;white-space:nowrap;transition:background .2s,color .2s,border-color .2s}
+.btn:hover{background:transparent;color:var(--text)}
+.btn.ghost{background:transparent;color:var(--text);border-color:var(--line-2)}
+.btn.ghost:hover{border-color:var(--text);background:rgba(238,231,219,.07)}
+.btn.sm{min-height:40px;padding:0 16px}
+.paper .btn{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.paper .btn:hover{background:transparent;color:var(--ink)}
+.paper .btn.ghost{background:transparent;color:var(--ink);border-color:var(--ink-line)}
+.paper .btn.ghost:hover{border-color:var(--ink);background:rgba(26,21,17,.06)}
+
+/* шапка */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:60;background:rgba(13,10,8,.88);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top-in{display:flex;align-items:center;gap:24px;height:72px}
+.mark{display:flex;align-items:center;gap:12px;text-decoration:none;flex:none}
+.mark svg{width:30px;height:30px;color:var(--bronze)}
+.mark b{font-weight:800;font-size:1rem;letter-spacing:.16em}
+.mark i{font-family:var(--serif);font-style:italic;font-weight:400;font-size:1.2rem;margin-left:.3em}
+.nav{display:flex;gap:clamp(16px,2.4vw,32px);margin-left:auto}
+.nav a{font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);text-decoration:none;padding-block:8px;transition:color .2s}
+.nav a:hover{color:var(--text)}
+.nav .nav-order{display:none}
+.burger{display:none;width:44px;height:44px;margin-left:auto;border:1px solid var(--line-2);background:none;border-radius:50%;place-items:center}
+.burger span{display:block;width:16px;height:1px;background:var(--text);box-shadow:0 5px 0 var(--text),0 -5px 0 var(--text)}
+
+/* первый экран */
+.hero{background:var(--bg-deep);overflow:hidden}
+.hero-in{display:grid;grid-template-columns:minmax(0,1.04fr) minmax(0,.96fr);gap:clamp(28px,5vw,80px);align-items:start;padding-block:clamp(36px,5.5vw,80px)}
+.hero h1{margin-bottom:28px}
+.lead{max-width:50ch;font-size:clamp(1.02rem,1.5vw,1.16rem);line-height:1.62;color:var(--muted)}
+.cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:36px}
+.hero-fig{position:relative;aspect-ratio:1/1;background:var(--pit);overflow:hidden}
+.hero-fig>img{width:100%;height:100%;object-fit:cover;object-position:26% 50%}
+.tag-card{position:absolute;left:16px;right:16px;bottom:16px;max-width:380px;display:flex;align-items:center;gap:14px;padding:10px 16px 10px 10px;background:rgba(13,10,8,.8);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);border:1px solid var(--line-2);text-decoration:none;transition:border-color .2s}
+.tag-card:hover{border-color:var(--text)}
+.tag-card{width:calc(100% - 32px);text-align:left;color:inherit;font:inherit;cursor:pointer}
+.tag-card img{width:56px;height:56px;object-fit:cover;flex:none}
+.tag-card .t{display:block;font-weight:700;font-size:15px;line-height:1.3}
+.tag-card .p{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.tag-card svg{width:20px;height:20px;margin-left:auto;flex:none}
+
+.facts{background:var(--bg-deep);border-block:1px solid var(--line)}
+.facts-in{display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+.fact{padding:26px clamp(12px,2vw,28px);border-right:1px solid var(--line)}
+.fact:first-child{padding-left:0}
+.fact:last-child{border-right:0}
+.fact b{display:block;font-weight:800;font-size:clamp(1.3rem,2.3vw,1.9rem);line-height:1.1;letter-spacing:-.03em}
+.fact span{display:block;margin-top:8px;color:var(--muted);font-size:14px;line-height:1.45}
+
+/* мастерская */
+.man-grid{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:clamp(28px,6vw,96px);align-items:start}
+.rows{display:grid}
+.rows>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,3fr);gap:24px;padding:24px 0;border-top:1px solid var(--ink-line)}
+.rows>div:last-child{border-bottom:1px solid var(--ink-line)}
+.rows dt{padding-top:4px;font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--ink-muted)}
+.rows dd{font-size:1.06rem;line-height:1.6}
+.duo{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1fr);gap:clamp(12px,2vw,28px);margin-top:clamp(40px,5vw,72px)}
+.duo figure{display:flex;flex-direction:column;gap:12px}
+.duo img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.duo figure:last-child img{object-position:50% 30%}
+.duo figcaption{font-size:14px;line-height:1.5;color:var(--ink-muted);max-width:58ch}
+
+/* коллекция */
+.sec-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:24px 48px;margin-bottom:clamp(28px,4vw,44px)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{min-height:44px;padding:0 18px;border:1px solid var(--line-2);background:transparent;color:var(--muted);font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;border-radius:2px;transition:background .2s,color .2s,border-color .2s}
+.chip span{margin-left:8px;font-weight:500;opacity:.65}
+.chip:hover{color:var(--text);border-color:var(--text)}
+.chip[aria-pressed="true"]{background:var(--text);color:var(--bg-deep);border-color:var(--text)}
+.colnote{min-height:1.65em;margin-bottom:20px;color:var(--muted)}
+.cabinet{padding:clamp(12px,2vw,26px);background:var(--grain),linear-gradient(180deg,var(--wood-hi),var(--wood) 26%,var(--wood));box-shadow:inset 0 1px 0 rgba(255,255,255,.07),inset 0 0 0 1px rgba(0,0,0,.5),0 50px 90px -40px rgba(0,0,0,.8)}
+.cells{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:clamp(8px,1.2vw,16px)}
+.cell{display:flex;flex-direction:column;background:var(--pit);box-shadow:inset 0 3px 14px rgba(0,0,0,.8),inset 0 0 0 1px rgba(0,0,0,.7),0 1px 0 rgba(255,255,255,.06)}
+.ph{position:relative;display:block;width:100%;aspect-ratio:1/1;padding:0;border:0;overflow:hidden;background:#0a0806;cursor:zoom-in}
+.ph img{width:100%;height:100%;object-fit:cover;object-position:var(--fx,50%) var(--fy,50%);transform:scale(var(--z,1));transform-origin:var(--fx,50%) var(--fy,50%);transition:transform .7s cubic-bezier(.2,.7,.3,1)}
+.cell:hover .ph img{transform:scale(calc(var(--z,1) * 1.05))}
+.meta{display:grid;gap:8px;padding:14px 16px 16px}
+.mrow{display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:2px 12px}
+.meta h3{font-size:15.5px}
+.price{font-weight:700;font-size:15px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.spec{color:var(--muted);font-size:14px;line-height:1.45}
+.mact{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:10px 12px;margin-top:4px}
+.stat{display:inline-flex;align-items:center;gap:8px;color:var(--muted);font-size:13px;line-height:1.3}
+.stat::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--matcha)}
+.stat.order::before{background:var(--bronze)}
+.stat.held::before{background:var(--faint)}
+.want{min-height:36px;padding:0 14px;border:1px solid var(--line-2);background:transparent;color:var(--text);font-size:13px;font-weight:600;letter-spacing:.04em;border-radius:2px;transition:background .2s,color .2s,border-color .2s}
+.want:hover{border-color:var(--text)}
+.want[aria-pressed="true"]{background:var(--text);color:var(--bg-deep);border-color:var(--text)}
+.cab-note{margin-top:20px;color:var(--muted);font-size:14px;max-width:70ch}
+
+/* процесс */
+.steps{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:clamp(12px,1.6vw,24px);margin-top:clamp(32px,4vw,56px)}
+.step{position:relative;padding-top:22px;border-top:1px solid var(--line-2)}
+.step::before{content:"";position:absolute;top:-4px;left:0;width:7px;height:7px;border-radius:50%;background:var(--bronze)}
+.step figure{aspect-ratio:4/5;margin-bottom:18px;overflow:hidden;background:var(--pit)}
+.step img{width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(1.05)}
+.step img.pos-heat{object-position:62% 62%}
+.when{margin:2px 0 10px;color:var(--bronze);font-size:14px;font-weight:600}
+.step p:last-child{color:var(--muted);font-size:14.5px;line-height:1.55}
+
+/* заведения */
+.v-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,5vw,80px);align-items:start}
+.occ{display:grid;margin-top:32px}
+.occ>div{padding:22px 0;border-top:1px solid var(--ink-line)}
+.occ>div:last-child{border-bottom:1px solid var(--ink-line)}
+.occ h3{margin-bottom:6px;font-size:1.15rem}
+.occ p{color:var(--ink-muted)}
+.terms{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1px;margin-top:32px;background:var(--ink-line);border:1px solid var(--ink-line)}
+.terms>div{padding:16px 18px;background:var(--paper)}
+.terms dt{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)}
+.terms dd{margin-top:4px;font-weight:600}
+.calc{position:sticky;top:96px;background:var(--bg-deep);color:var(--text);color-scheme:dark;box-shadow:0 40px 70px -40px rgba(26,21,17,.7)}
+.calc>img{width:100%;aspect-ratio:16/9;object-fit:cover;object-position:50% 55%}
+.calc-body{display:grid;gap:22px;padding:clamp(20px,2.4vw,28px)}
+.cg{display:grid;gap:10px}
+.lab{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.seg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.seg button{min-height:48px;padding:6px 12px;border:1px solid var(--line-2);background:transparent;border-radius:2px;text-align:left;line-height:1.25;font-size:14px;font-weight:600;transition:background .2s,color .2s,border-color .2s}
+.seg button small{display:block;font-size:13px;font-weight:400;color:var(--muted)}
+.seg button:hover{border-color:var(--text)}
+.seg button[aria-pressed="true"]{background:var(--text);color:var(--bg-deep);border-color:var(--text)}
+.seg button[aria-pressed="true"] small{color:#4b4236}
+.qty{display:grid;grid-template-columns:1fr auto;align-items:center;gap:16px}
+.qty output{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.qty input{grid-column:1/-1;width:100%;accent-color:var(--bronze)}
+.chk{display:flex;align-items:flex-start;gap:12px;font-size:15px;line-height:1.4;text-transform:none;letter-spacing:0;font-weight:500;color:var(--text);cursor:pointer}
+.chk input{flex:none;width:20px;height:20px;margin:1px 0 0;accent-color:var(--bronze)}
+.out{display:grid;gap:6px;padding-top:20px;border-top:1px solid var(--line-2)}
+.out .big{font-size:clamp(1.8rem,3vw,2.3rem);font-weight:800;letter-spacing:-.03em;line-height:1.1;font-variant-numeric:tabular-nums}
+.out p{color:var(--muted);font-size:14px}
+.out .note{margin-top:6px;line-height:1.5}
+.calc .btn{margin-top:12px;background:var(--text);color:var(--bg-deep);border-color:var(--text)}
+.calc .btn:hover{background:transparent;color:var(--text)}
+
+/* занятия */
+.cl-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:clamp(28px,5vw,80px);align-items:start}
+.cl-ph{position:sticky;top:96px}
+.cl-ph img{width:100%;aspect-ratio:2/3;object-fit:cover}
+.sched{margin-top:clamp(28px,4vw,44px);border-top:1px solid var(--line-2)}
+.sess{display:grid;grid-template-columns:minmax(0,150px) minmax(0,1fr) auto auto;align-items:center;gap:12px clamp(16px,2.4vw,32px);padding:20px 0;border-bottom:1px solid var(--line)}
+.sess .d{font-weight:700;line-height:1.35}
+.sess .d small{display:block;font-weight:400;color:var(--muted);font-size:14px}
+.sess .n{line-height:1.4}
+.sess .n small{display:block;color:var(--muted);font-size:14px;margin-top:2px}
+.sess .pr{font-weight:700;font-variant-numeric:tabular-nums;white-space:nowrap}
+.sess .go{display:grid;justify-items:end;gap:6px}
+.sess .go small{color:var(--muted);font-size:13px}
+.sess.full .go small{color:var(--bronze)}
+.incl{margin-top:20px;color:var(--muted);font-size:14px;max-width:64ch}
+.course{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);margin-top:clamp(56px,7vw,96px);border:1px solid var(--line-2);background:var(--surface)}
+.course>img{width:100%;height:100%;min-height:280px;object-fit:cover}
+.course-body{display:grid;gap:20px;align-content:start;padding:clamp(24px,3.4vw,48px)}
+.course-body h3{font-size:clamp(1.5rem,2.6vw,2.1rem);letter-spacing:-.025em;line-height:1.12}
+.course-body h3 em{font-family:var(--serif);font-style:italic;font-weight:400}
+.prog{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 32px;counter-reset:l}
+.prog li{counter-increment:l;display:grid;grid-template-columns:auto 1fr;gap:12px;padding:10px 0;border-top:1px solid var(--line);font-size:15px;line-height:1.45}
+.prog li::before{content:counter(l);min-width:1.2em;color:var(--bronze);font-weight:700;font-variant-numeric:tabular-nums}
+.course-price{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 20px}
+.course-price b{font-size:clamp(1.7rem,3vw,2.3rem);font-weight:800;letter-spacing:-.03em;font-variant-numeric:tabular-nums}
+.course-price span{color:var(--muted);font-size:14px}
+
+/* вопросы */
+.faq-grid{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,8fr);gap:clamp(28px,5vw,80px);align-items:start}
+.qa{border-top:1px solid var(--line-2)}
+.qa details{border-bottom:1px solid var(--line-2)}
+.qa summary{display:flex;align-items:flex-start;justify-content:space-between;gap:24px;padding:22px 0;font-size:1.08rem;font-weight:600;line-height:1.4;list-style:none;cursor:pointer}
+.qa summary::-webkit-details-marker{display:none}
+.qa summary::after{content:"";flex:none;width:12px;height:12px;margin-top:7px;background:linear-gradient(var(--text),var(--text)) center/12px 1px no-repeat,linear-gradient(var(--text),var(--text)) center/1px 12px no-repeat;transition:transform .25s}
+.qa details[open] summary::after{transform:rotate(45deg)}
+.qa details p{max-width:64ch;padding:0 40px 24px 0;color:var(--muted)}
+
+/* заявка */
+.ord-grid{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:clamp(28px,5vw,80px);align-items:start}
+.wish{display:flex;flex-wrap:wrap;gap:8px;margin:28px 0 4px}
+.wchip{display:inline-flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border:1px solid var(--ink);font-size:14px;font-weight:600}
+.wchip button{width:24px;height:24px;border:0;background:transparent;font-size:18px;line-height:1;border-radius:50%}
+.wchip button:hover{background:rgba(26,21,17,.1)}
+#ask{margin-top:32px}
+.wish+#ask{margin-top:20px}
+.field{display:grid;gap:4px;margin-bottom:22px}
+.field label{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted)}
+.field input,.field select,.field textarea{width:100%;padding:10px 0;border:0;border-bottom:1px solid var(--ink-line);border-radius:0;background:transparent;color:var(--ink);font-size:16px;outline:0;transition:border-color .2s,box-shadow .2s}
+.field textarea{resize:vertical;min-height:96px}
+.field input:focus,.field select:focus,.field textarea:focus{border-bottom-color:var(--ink);box-shadow:0 1px 0 var(--ink)}
+.two{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 24px}
+.err{margin:0 0 16px;color:#9b2c1c;font-weight:600}
+.sent{display:grid;gap:14px}
+.sent .ok{font-size:1.5rem;font-weight:700;letter-spacing:-.02em}
+.sent pre{margin:0;padding:18px;background:rgba(26,21,17,.06);border:1px solid var(--ink-line);white-space:pre-wrap;font:14px/1.6 var(--sans)}
+.sent .btn{justify-self:start}
+.ord-side{display:grid;gap:24px}
+.ord-side img{width:100%;aspect-ratio:4/3;object-fit:cover}
+.info{display:grid}
+.info>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:16px;padding:14px 0;border-top:1px solid var(--ink-line)}
+.info>div:last-child{border-bottom:1px solid var(--ink-line)}
+.info dt{font-size:13px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-muted);padding-top:3px}
+.soc{display:flex;flex-wrap:wrap;gap:8px}
+
+/* подвал */
+.foot{background:var(--bg-deep);border-top:1px solid var(--line);padding-block:48px 32px}
+.foot-in{display:flex;flex-wrap:wrap;align-items:flex-start;justify-content:space-between;gap:32px 64px}
+.foot p{margin-top:14px;color:var(--muted);font-size:14px;max-width:34ch}
+.foot-nav{display:flex;flex-wrap:wrap;gap:12px 28px}
+.foot-nav a{font-size:13px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--muted);text-decoration:none}
+.foot-nav a:hover{color:var(--text)}
+.foot .legal{max-width:none;margin-top:40px;padding-top:20px;border-top:1px solid var(--line);color:var(--muted);font-size:14px}
+
+/* карточка вещи */
+.pd{position:fixed;inset:0;z-index:100;display:grid;place-items:center;padding:clamp(12px,3vw,40px);background:rgba(8,6,4,.84);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.pd-panel{position:relative;display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr);width:min(1040px,100%);max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow:auto;background:var(--surface);border:1px solid var(--line-2);box-shadow:0 40px 100px rgba(0,0,0,.6)}
+.pd-fig{display:grid;place-items:center;min-height:320px;background:#0a0806}
+.pd-fig img{width:100%;height:100%;max-height:min(760px,calc(100vh - 24px));object-fit:contain}
+.pd-body{display:flex;flex-direction:column;gap:16px;padding:clamp(22px,3vw,40px)}
+.pd-body h3{padding-right:36px;font-size:clamp(1.4rem,2.4vw,1.9rem);letter-spacing:-.025em}
+.pd-price{font-size:1.5rem;font-weight:800;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.pd-spec{display:grid;border-top:1px solid var(--line)}
+.pd-spec>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,2fr);gap:12px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px;line-height:1.45}
+.pd-spec dt{color:var(--muted)}
+.pd-act{display:flex;flex-wrap:wrap;gap:10px;margin-top:4px}
+.pd-note{color:var(--muted);font-size:14px}
+.pd-x{position:absolute;top:10px;right:10px;z-index:2;width:44px;height:44px;border:1px solid var(--line-2);border-radius:50%;background:rgba(13,10,8,.72);font-size:24px;line-height:1}
+.pd-x:hover{border-color:var(--text)}
+.wishbar{position:fixed;left:50%;bottom:calc(16px + env(safe-area-inset-bottom,0px));z-index:90;display:flex;align-items:center;gap:16px;padding:8px 8px 8px 20px;transform:translateX(-50%);background:var(--text);color:var(--bg-deep);border-radius:2px;box-shadow:0 20px 50px rgba(0,0,0,.55);font-size:14px;font-weight:700;white-space:nowrap}
+.wishbar .btn{min-height:40px;background:var(--bg-deep);color:var(--text);border-color:var(--bg-deep)}
+.wishbar .btn:hover{background:transparent;color:var(--bg-deep)}
+
+@media (max-width:1080px){
+  .cells{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .steps{grid-template-columns:repeat(3,minmax(0,1fr));row-gap:40px}
+}
+@media (max-width:1120px){
+  .nav,.top .btn{display:none}
+  .burger{display:grid}
+  .top.open .nav{display:flex;flex-direction:column;gap:6px;position:absolute;left:0;right:0;top:73px;padding:16px var(--gut) 24px;background:rgba(13,10,8,.97);border-bottom:1px solid var(--line)}
+  .top.open .nav a{padding-block:10px;font-size:14px}
+  .top.open .nav .nav-order{display:block}
+}
+@media (max-width:980px){
+  .hero-in,.man-grid,.v-grid,.cl-grid,.faq-grid,.ord-grid{grid-template-columns:minmax(0,1fr)}
+  .hero-fig{aspect-ratio:4/3}
+  .calc,.cl-ph{position:static}
+  .cl-ph img{aspect-ratio:4/3;object-position:50% 40%}
+  .course{grid-template-columns:minmax(0,1fr)}
+  .course>img{min-height:0;aspect-ratio:16/9}
+  .facts-in{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .fact:nth-child(2){border-right:0}
+  .fact:nth-child(n+3){border-top:1px solid var(--line)}
+  .fact:nth-child(3){padding-left:0}
+}
+@media (max-width:720px){
+  .cells{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .meta{padding:12px 12px 14px}
+  .mact .want{width:100%}
+  .duo{grid-template-columns:minmax(0,1fr);row-gap:28px}
+  .rows>div{grid-template-columns:minmax(0,1fr);gap:6px}
+  .steps{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:min(74vw,290px);overflow-x:auto;scroll-snap-type:x proximity;scroll-padding-inline:var(--gut);margin-inline:calc(var(--gut) * -1);padding:0 var(--gut) 12px;-webkit-overflow-scrolling:touch}
+  .step{scroll-snap-align:start}
+  .sess{grid-template-columns:minmax(0,1fr) auto}
+  .sess .d{grid-column:1/-1}
+  .sess .n{grid-column:1/-1}
+  .prog{grid-template-columns:minmax(0,1fr)}
+  .terms{grid-template-columns:minmax(0,1fr)}
+  .two{grid-template-columns:minmax(0,1fr)}
+  .info>div{grid-template-columns:minmax(0,1fr)}
+  .pd-panel{grid-template-columns:minmax(0,1fr)}
+  .pd-fig{min-height:0;aspect-ratio:1/1}
+  .wishbar{width:calc(100% - 32px);justify-content:space-between}
+}
+@media (max-width:420px){
+  .seg{grid-template-columns:minmax(0,1fr)}
+  .tag-card{left:10px;right:10px;bottom:10px}
+  .cta .btn{width:100%}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{transition:none!important;animation:none!important}
+}
+</style>
+</head>
+<body>
+
+
+<header class="top" id="top">
+  <div class="wrap top-in">
+    <a class="mark" href="#top" aria-label="Глина и пепел — в начало страницы">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.2a12.8 12.8 0 1 0 11.6 7.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+      <span><b>ГЛИНА</b> <i>и&nbsp;пепел</i></span>
+    </a>
+    <nav class="nav" id="nav" aria-label="Разделы сайта">
+      <a href="#collection">Коллекция</a>
+      <a href="#about">Мастерская</a>
+      <a href="#venues">Для заведений</a>
+      <a href="#classes">Мастер-классы</a>
+      <a href="#faq">Вопросы</a>
+      <a class="nav-order" href="#order">Заявка</a>
+    </nav>
+    <a class="btn sm" href="#order">Написать</a>
+    <button class="burger" id="burger" type="button" aria-label="Открыть меню" aria-expanded="false"><span></span></button>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-in">
+    <div class="hero-copy">
+      <h1>Каждая чаша — <em>единственная</em></h1>
+      <p class="lead">Чаши, чайники, тарелки и вазы. Точим на гончарном круге в Санкт-Петербурге, обжигаем при 1 250 °C и глазуруем вручную. Поэтому повторить вещь до последнего пятна нельзя, а сделать близкую можно.</p>
+      <div class="cta">
+        <a class="btn" href="#collection">Смотреть коллекцию</a>
+        <a class="btn ghost" href="#classes">Записаться на мастер-класс</a>
+      </div>
+    </div>
+    <figure class="hero-fig">
+      <img src="img/hero-pour.jpg" width="1500" height="1000" fetchpriority="high" alt="Чай наливают из стеклянного кувшина в две небольшие керамические пиалы на тёмном ковре">
+      <button class="tag-card" type="button" data-open="lagoon-bowl">
+        <img src="img/bowl-lagoon.jpg" width="112" height="112" alt="">
+        <span><span class="t">Пиала «Лагуна»</span><span class="p">3 200 ₽ · в наличии</span></span>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M4 10h11M11 5l5 5-5 5" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </figure>
+  </div>
+</section>
+
+<section class="facts" aria-label="Коротко о мастерской">
+  <div class="wrap facts-in">
+    <div class="fact"><b>1 250 °C</b><span>температура второго обжига, после него глазурь не боится воды и посудомойки</span></div>
+    <div class="fact"><b>4 недели</b><span>от комка глины до готовой вещи: сушка и два обжига быстрее не делаются</span></div>
+    <div class="fact"><b>от 20 шт.</b><span>серии посуды для кафе, ресторанов и чайных, с вашим клеймом на донце</span></div>
+    <div class="fact"><b>по России</b><span>упаковываем в двойной короб и заменяем вещь, если она приехала разбитой</span></div>
+  </div>
+</section>
+
+<section class="sec paper" id="about">
+  <div class="wrap">
+    <div class="man-grid">
+      <h2>Не выравниваем неровности: <em>в&nbsp;них вся вещь</em></h2>
+      <dl class="rows">
+        <div><dt>Глина</dt><dd>Шамот и фарфоровая масса. Часть замешиваем сами, поэтому знаем, как она поведёт себя в огне.</dd></div>
+        <div><dt>Круг</dt><dd>Каждую вещь точим на круге и доводим руками. Отливок и покупных заготовок у нас нет.</dd></div>
+        <div><dt>Огонь</dt><dd>Два обжига: при 980 °C и при 1 250 °C. Глазурь никогда не подчиняется до конца, отсюда пятна, кракле и оттенки.</dd></div>
+        <div><dt>Стол</dt><dd>Внутри посуды только пищевые глазури. Из неё можно есть и пить, её можно мыть в посудомойке и греть в микроволновке.</dd></div>
+      </dl>
+    </div>
+    <div class="duo">
+      <figure>
+        <img src="img/shelves.jpg" width="1400" height="933" loading="lazy" alt="Тёмные деревянные полки с керамическими тарелками и мисками">
+        <figcaption>Полка в мастерской: здесь остывает и ждёт хозяев всё, что вышло из печи</figcaption>
+      </figure>
+      <figure>
+        <img src="img/crackle.jpg" width="1600" height="2559" loading="lazy" alt="Белая глазурь с тонкой сеткой трещин кракле">
+        <figcaption>Кракле — сетка трещин в глазури. Она появляется при остывании, когда глина и глазурь сжимаются по-разному. Мы её не убираем</figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="collection">
+  <div class="wrap">
+    <div class="sec-head">
+      <div>
+        <h2>Что сейчас <em>на полке</em></h2>
+        <p class="sub">Каждая вещь одна такая. Нажмите «Хочу такую»: закрепим её за вами или сделаем похожую. Форма останется, глазурь ляжет иначе.</p>
+      </div>
+      <div class="chips" id="chips" role="group" aria-label="Коллекции">
+        <button class="chip" type="button" data-chip="all" aria-pressed="true">Все <span>12</span></button>
+        <button class="chip" type="button" data-chip="night" aria-pressed="false">Ночь <span>4</span></button>
+        <button class="chip" type="button" data-chip="frost" aria-pressed="false">Иней <span>4</span></button>
+        <button class="chip" type="button" data-chip="ochre" aria-pressed="false">Охра <span>4</span></button>
+      </div>
+    </div>
+    <p class="colnote" id="colnote" aria-live="polite"></p>
+    <div class="cabinet"><ul class="cells" id="cells"></ul></div>
+    <p class="cab-note">Полка обновляется, когда вещи заканчиваются. Если понравившуюся забрали, напишите: сделаем похожую за три недели.</p>
+  </div>
+</section>
+
+<section class="sec deep" id="process">
+  <div class="wrap">
+    <h2>От комка глины до чаши — <em>четыре недели</em></h2>
+    <p class="sub">Столько живёт одна вещь в мастерской. Быстрее не получится: глина должна высохнуть, глазурь расплавиться, а печь остыть.</p>
+    <ol class="steps">
+      <li class="step">
+        <figure><img src="img/proc-wheel.jpg" width="800" height="533" loading="lazy" alt="Руки лепят сосуд на гончарном круге, чёрно-белое фото"></figure>
+        <h3>Круг</h3>
+        <p class="when">День 1</p>
+        <p>Центруем комок глины и вытягиваем форму. Дно оставляем толще стенок: оно держит вес.</p>
+      </li>
+      <li class="step">
+        <figure><img src="img/proc-dry.jpg" width="800" height="533" loading="lazy" alt="Ряды сырых серых кружек сохнут на подносе"></figure>
+        <h3>Сушка</h3>
+        <p class="when">Неделя 1</p>
+        <p>Вещь сохнет под плёнкой и на воздухе. Спешка ломает: неровно высохшая глина трескается в печи.</p>
+      </li>
+      <li class="step">
+        <figure><img src="img/proc-kiln.jpg" width="800" height="533" loading="lazy" alt="Обожжённые чашки на кирпичах в печи, между кирпичами виден оранжевый жар"></figure>
+        <h3>Первый обжиг</h3>
+        <p class="when">Неделя 2 · 980 °C</p>
+        <p>Глина становится керамикой, но ещё пористой. Теперь вещь можно брать в руки и глазуровать.</p>
+      </li>
+      <li class="step">
+        <figure><img src="img/proc-glaze.jpg" width="800" height="533" loading="lazy" alt="Рука расписывает тарелку кистью"></figure>
+        <h3>Глазурь</h3>
+        <p class="when">Неделя 3</p>
+        <p>Окунаем, поливаем, расписываем. Цвет зависит от толщины слоя: тонкий выходит светлее, густой темнее.</p>
+      </li>
+      <li class="step">
+        <figure><img class="pos-heat" src="img/bowl-heat.jpg" width="1000" height="1414" loading="lazy" alt="Тёмная чаша с красно-коричневыми пятнами глазури крупным планом"></figure>
+        <h3>Второй обжиг</h3>
+        <p class="when">Неделя 4 · 1 250 °C</p>
+        <p>Глазурь плавится и растекается по-своему. Печь открываем через двое суток и смотрим, что получилось.</p>
+      </li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec paper" id="venues">
+  <div class="wrap v-grid">
+    <div>
+      <h2>Посуда для вашего <em>заведения</em></h2>
+      <p class="sub">Тарелки, пиалы, кружки и чайные пары для кафе, ресторанов и чайных. Серии от 20 предметов: размер и вес одинаковые, а глазурь живая, поэтому у каждого гостя на столе вещь чуть своя.</p>
+      <div class="occ">
+        <div>
+          <h3>Кафе, рестораны, чайные</h3>
+          <p>Перед серией делаем два пробных образца и подбираем размер под вашу подачу. Клеймо с логотипом ставим оттиском на донце.</p>
+        </div>
+        <div>
+          <h3>Корпоративные подарки</h3>
+          <p>Чаша или чайная пара в крафтовой коробке, на донце имя или логотип. К Новому году заказы принимаем до 10 ноября.</p>
+        </div>
+        <div>
+          <h3>Свадьбы и события</h3>
+          <p>Парные чаши с датой, наборы для гостей от 10 штук, блюдо для колец. Писать лучше за 6—8 недель.</p>
+        </div>
+      </div>
+      <dl class="terms">
+        <div><dt>Тираж</dt><dd>от 20 предметов</dd></div>
+        <div><dt>Срок</dt><dd>4—6 недель</dd></div>
+        <div><dt>Клеймо</dt><dd>логотип на донце</dd></div>
+        <div><dt>Документы</dt><dd>счёт, договор, акты</dd></div>
+      </dl>
+    </div>
+
+    <aside class="calc" id="calc" aria-label="Расчёт серии посуды">
+      <img src="img/b2b-steak.jpg" width="1300" height="865" loading="lazy" alt="Мясо со спаржей на тёмной матовой керамической тарелке">
+      <div class="calc-body">
+        <div class="cg">
+          <span class="lab" id="calcWhat">Что нужно</span>
+          <div class="seg" id="seg" role="group" aria-labelledby="calcWhat">
+            <button type="button" data-k="bowl" aria-pressed="false">Пиалы<small>Ø 12 см</small></button>
+            <button type="button" data-k="plate" aria-pressed="true">Тарелки<small>Ø 26 см</small></button>
+            <button type="button" data-k="mug" aria-pressed="false">Кружки<small>300 мл</small></button>
+            <button type="button" data-k="pair" aria-pressed="false">Чайные пары<small>чашка и блюдце</small></button>
+          </div>
+        </div>
+        <div class="cg">
+          <label class="lab" for="qty">Сколько предметов</label>
+          <div class="qty">
+            <output id="qtyOut" for="qty">60 шт.</output>
+            <input id="qty" type="range" min="20" max="300" step="10" value="60">
+          </div>
+        </div>
+        <div class="cg">
+          <label class="chk" for="stamp"><input type="checkbox" id="stamp" checked><span>Клеймо с логотипом на донце: штамп 8 000 ₽, делаем один раз</span></label>
+        </div>
+        <div class="out" aria-live="polite">
+          <div class="big" id="total"></div>
+          <p id="per"></p>
+          <p id="weeks"></p>
+          <p class="note">Точный расчёт после обсуждения размеров и глазури. Стоимость пробных образцов вычитаем из заказа.</p>
+          <a class="btn" id="calcGo" href="#order">Запросить расчёт</a>
+        </div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="sec" id="classes">
+  <div class="wrap">
+    <div class="cl-grid">
+      <div>
+        <h2>Слепите свою чашу <em>за три часа</em></h2>
+        <p class="sub">Сами центруете глину и вытягиваете форму на гончарном круге. Готовую вещь забираете через три недели, после двух обжигов. Опыт не нужен, в группе до шести человек.</p>
+        <ul class="sched" id="sched"></ul>
+        <p class="incl">Глина, глазури, фартук и оба обжига входят в цену. Готовые вещи можно забрать в мастерской или мы отправим их по России.</p>
+      </div>
+      <figure class="cl-ph">
+        <img src="img/workshop.jpg" width="900" height="1350" loading="lazy" alt="Женщины за общим столом лепят из глины в светлой мастерской с деревянным потолком">
+      </figure>
+    </div>
+
+    <div class="course">
+      <img src="img/course-hands.jpg" width="1200" height="800" loading="lazy" alt="Мокрые руки формируют горшок на гончарном круге">
+      <div class="course-body">
+        <h3>Курс «Гончарный круг»: <em>восемь занятий</em></h3>
+        <p id="courseWhen"></p>
+        <ol class="prog">
+          <li>Центровка глины и первый цилиндр</li>
+          <li>Чаша: высота, толщина стенки, край</li>
+          <li>Кружка и ручка</li>
+          <li>Тарелка и плоские формы</li>
+          <li>Срезка донца и доводка после подсушки</li>
+          <li>Глазури: как угадать цвет до обжига</li>
+          <li>Ваза и крупная форма</li>
+          <li>Выдача обожжённых вещей и разбор работ</li>
+        </ol>
+        <div class="course-price"><b>24 000 ₽</b><span>или три платежа по 8 000 ₽ без переплат</span></div>
+        <div><a class="btn" id="courseGo" href="#order">Записаться на курс</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec deep" id="faq">
+  <div class="wrap faq-grid">
+    <div>
+      <h2>Что спрашивают <em>чаще всего</em></h2>
+      <p class="sub">Не нашли своё? Напишите, ответим в течение дня.</p>
+    </div>
+    <div class="qa">
+      <details open>
+        <summary>Можно ли мыть в посудомойке и греть в микроволновке?</summary>
+        <p>Да. Глазурь обожжена при 1 250 °C, она не пропускает воду и не боится нагрева. Не стоит только переносить вещь из холодильника на открытый огонь или в раскалённую духовку.</p>
+      </details>
+      <details>
+        <summary>Безопасна ли глазурь для еды?</summary>
+        <p>Внутри посуды только пищевые глазури, которые мы обжигаем до полного спекания. Декоративные глазури с медью и кобальтом кладём снаружи и на вазы.</p>
+      </details>
+      <details>
+        <summary>Почему вещь может отличаться от фото?</summary>
+        <p>Мы фотографируем ту самую вещь, которую отправим вам. Если делаем под заказ, форма и цвет будут близкими, а рисунок глазури новым: она всегда ведёт себя по-своему.</p>
+      </details>
+      <details>
+        <summary>Сколько ждать и можно ли повторить понравившуюся вещь?</summary>
+        <p>Вещи из наличия отправляем за два дня. Повтор или заказ под ваш размер занимает четыре недели: столько нужно на сушку и два обжига.</p>
+      </details>
+      <details>
+        <summary>Как вы упаковываете и что, если вещь разбилась в дороге?</summary>
+        <p>Оборачиваем плёнкой и крафтом, кладём в двойной короб. Если что-то приехало разбитым, снимите вскрытие посылки на видео: сделаем новую вещь или вернём деньги.</p>
+      </details>
+      <details>
+        <summary>Можно ли сделать по моему эскизу или с гравировкой?</summary>
+        <p>Да. Присылайте рисунок и размеры. Учтите усадку: глина сжимается на 12 %, поэтому после обжига вещь меньше, чем сырая. Надпись делаем на донце или по борту.</p>
+      </details>
+      <details>
+        <summary>Где забрать и как доставляете?</summary>
+        <p>Самовывоз из мастерской на Выборгской стороне по записи. По России отправляем СДЭК и Почтой России, при заказе от 10 000 ₽ доставка бесплатная.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="sec paper" id="order">
+  <div class="wrap ord-grid">
+    <div>
+      <h2>Расскажите, <em>что вам нужно</em></h2>
+      <p class="sub">Выберите вещи в коллекции, пришлите размеры для заведения или запишитесь на мастер-класс. Ответим в течение дня.</p>
+      <div class="wish" id="wish" hidden></div>
+      <form id="ask" novalidate>
+        <div id="formErr"></div>
+        <div class="two">
+          <div class="field"><label for="f-name">Имя</label><input id="f-name" name="name" type="text" autocomplete="name"></div>
+          <div class="field"><label for="f-link">Telegram или телефон</label><input id="f-link" name="link" type="text" autocomplete="off"></div>
+        </div>
+        <div class="field">
+          <label for="f-topic">Что интересует</label>
+          <select id="f-topic" name="topic">
+            <option>Вещи из коллекции</option>
+            <option>Посуда для заведения</option>
+            <option>Корпоративные подарки</option>
+            <option>Свадьба или подарок</option>
+            <option>Мастер-класс</option>
+            <option>Курс</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-msg">Пожелания</label>
+          <textarea id="f-msg" name="msg" rows="4" placeholder="Размеры, сроки, цвет глазури, повод"></textarea>
+        </div>
+        <button class="btn" type="submit">Собрать заявку</button>
+      </form>
+      <div class="sent" id="sent" hidden></div>
+    </div>
+    <div class="ord-side">
+      <img src="img/tea-table.jpg" width="1800" height="1200" loading="lazy" alt="Чайный столик с тёмными чашками, чайниками и большой чашей в свете из окна">
+      <dl class="info">
+        <div><dt>Где</dt><dd>Санкт-Петербург, Выборгская сторона. Вход со двора, точный адрес пришлём после записи</dd></div>
+        <div><dt>Когда</dt><dd>Пн—сб, 12:00—20:00. Самовывоз и мастер-классы по записи</dd></div>
+        <div><dt>Доставка</dt><dd>По России — СДЭК и Почта России. При заказе от 10 000 ₽ доставка бесплатная</dd></div>
+        <div><dt>Связь</dt><dd><div class="soc"><button class="btn ghost sm" type="button">Telegram</button><button class="btn ghost sm" type="button">ВКонтакте</button><button class="btn ghost sm" type="button">WhatsApp</button></div></dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-in">
+      <div>
+        <a class="mark" href="#top" aria-label="Глина и пепел — в начало страницы">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.2a12.8 12.8 0 1 0 11.6 7.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <span><b>ГЛИНА</b> <i>и&nbsp;пепел</i></span>
+        </a>
+        <p>Керамика ручной работы. Санкт-Петербург</p>
+      </div>
+      <nav class="foot-nav" aria-label="Разделы в подвале">
+        <a href="#collection">Коллекция</a>
+        <a href="#about">Мастерская</a>
+        <a href="#venues">Для заведений</a>
+        <a href="#classes">Мастер-классы</a>
+        <a href="#faq">Вопросы</a>
+        <a href="#order">Заявка</a>
+      </nav>
+    </div>
+    <p class="legal">© 2026 Глина и пепел</p>
+  </div>
+</footer>
+
+<div class="pd" id="pd" role="dialog" aria-modal="true" aria-labelledby="pdName" hidden>
+  <div class="pd-panel">
+    <button class="pd-x" id="pdClose" type="button" aria-label="Закрыть">×</button>
+    <figure class="pd-fig"><img id="pdImg" alt=""></figure>
+    <div class="pd-body">
+      <h3 id="pdName"></h3>
+      <p class="pd-price" id="pdPrice"></p>
+      <p class="stat" id="pdStat"></p>
+      <p id="pdDesc"></p>
+      <dl class="pd-spec" id="pdSpec"></dl>
+      <div class="pd-act">
+        <button class="btn" id="pdWant" type="button">Хочу такую</button>
+        <button class="btn ghost" id="pdBack" type="button">Вернуться к полке</button>
+      </div>
+      <p class="pd-note" id="pdNote"></p>
+    </div>
+  </div>
+</div>
+
+<div class="wishbar" id="wishbar" hidden>
+  <span id="wishCount"></span>
+  <a class="btn" href="#order" id="wishGo">К заявке</a>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var $  = function(s,r){ return (r||document).querySelector(s); };
+  var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  var esc = function(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); };
+  var NB = "\xa0";
+  var num = function(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, NB); };
+  var rub = function(n){ return num(n) + NB + "₽"; };
+  var plural = function(n,a,b,c){ var m = n % 100, k = n % 10; if(m > 10 && m < 20) return c; if(k === 1) return a; if(k > 1 && k < 5) return b; return c; };
+  var plain = function(s){ return String(s).replace(/\xa0/g," "); };
+
+  /* русская типографика: неразрывные пробелы после коротких слов, перед тире, в числах */
+  var SHORT = "а|и|в|во|к|ко|с|со|у|о|об|на|по|за|из|от|до|не|ни|но|то|же|ли|бы|для|при|без|над|под|про|или|что|как|это";
+  var reShort = new RegExp("(^|[\\s(«„\xa0—-])(" + SHORT + ")[ \\t\\n]+(?=\\S)", "gi");
+  function typo(root){
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function(n){
+      var p = n.parentNode && n.parentNode.nodeName;
+      if(p === "SCRIPT" || p === "STYLE" || p === "TEXTAREA" || p === "PRE" || p === "OPTION") return NodeFilter.FILTER_REJECT;
+      return n.nodeValue && n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }});
+    var list = [], n;
+    while((n = w.nextNode())) list.push(n);
+    list.forEach(function(t){
+      var o = t.nodeValue, s = o;
+      s = s.replace(/[ ]+—/g, NB + "—");
+      s = s.replace(/[ ]·[ ]/g, NB + "· ");
+      s = s.replace(/(\S)—(?=\S)/g, "$1\u2060—\u2060");
+      s = s.replace(reShort, "$1$2" + NB).replace(reShort, "$1$2" + NB);
+      s = s.replace(/(\d)[ ](?=\d{3}(?!\d))/g, "$1" + NB);
+      s = s.replace(/(\d)[ ](?=[₽%°A-Za-zА-Яа-яЁё])/g, "$1" + NB);
+      s = s.replace(/Ø[ ]/g, "Ø" + NB);
+      if(s !== o) t.nodeValue = s;
+    });
+  }
+
+  /* каталог */
+  var COLS = {
+    night: "Тёмные глазури: тэммоку, масляные пятна и чёрная глина без глазури снаружи.",
+    frost: "Холодные глазури: белый фарфор, бирюзовый селадон и зольная белая.",
+    ochre: "Тёплые глазури: красная глина, охра и оранжевый цвет спелой хурмы."
+  };
+  var ALLNOTE = "Три коллекции, названные по цвету глазури. В каждой по четыре вещи.";
+  var ST = { stock: "В наличии", order: "Под заказ", held: "Забронирована" };
+  var NOTES = {
+    stock: "Отправим в течение двух дней. Упакуем в двойной короб.",
+    order: "Под заказ: сделаем за три недели. Форма и цвет будут близкими, рисунок глазури новым.",
+    held:  "Вещь забронирована. Можем сделать такую же за три недели: форма та же, глазурь ляжет иначе."
+  };
+  var CARE = "Можно в посудомойке и микроволновке";
+  var P = [
+    { id:"night-bowl", short:"Ø 12 см", col:"night", name:"Чаша «Ночь»", type:"Чаша для матчи", size:"Ø 12 см · 320 мл", glaze:"Тэммоку: тёмная железная глазурь, к краю светлеет до бронзы", price:6400, st:"stock", img:"bowl-night", fx:50, fy:78, z:1.9,
+      alt:"Небольшая чёрная чаша на тёмном градиентном фоне",
+      desc:"Тёмная глазурь на краю светлеет до бронзы. Чаша ложится в две ладони и долго держит тепло." },
+    { id:"heat-bowl", short:"Ø 13 см", col:"night", name:"Чаша «Жар»", type:"Чаша для чая", size:"Ø 13 см · 280 мл", glaze:"Масляные пятна: красно-коричневые капли на чёрном", price:5800, st:"order", img:"bowl-heat", fx:60, fy:62, z:1,
+      alt:"Тёмная чаша с красно-коричневыми пятнами глазури",
+      desc:"Капли железа всплывают на поверхность в печи, поэтому рисунок нельзя повторить. Сделаем новую чашу с другими пятнами." },
+    { id:"ink-pot", short:"350 мл", col:"night", name:"Чайник «Тушь»", type:"Чайник с пиалой", size:"350 мл · пиала 90 мл", glaze:"Тёмная шамотная глина, снаружи без глазури", care:"Мыть тёплой водой без моющего средства", price:8600, st:"stock", img:"teapot-ink", fx:56, fy:50, z:1,
+      alt:"Тёмный глиняный чайник и пиала на резном деревянном подносе",
+      desc:"Снаружи глина без глазури: от чая она со временем темнеет и становится глубже. Крышка притёрта к горлу и не гремит." },
+    { id:"soot-plate", short:"Ø 26 см", col:"night", name:"Тарелка «Сажа»", type:"Тарелка", size:"Ø 26 см · глубина 3 см", glaze:"Матовая чёрная", price:3400, st:"order", img:"plate-soot", fx:50, fy:50, z:1,
+      alt:"Чёрная матовая тарелка на тёмной серой поверхности",
+      desc:"Ровный матовый борт и широкое дно: рыба и хлеб на ней смотрятся одинаково хорошо. В серии из шести тарелки одного размера, но каждая своего оттенка." },
+
+    { id:"milk-set", short:"150 мл", col:"frost", name:"Набор «Молоко»", type:"Гайвань и 6 пиал", size:"гайвань 150 мл · пиалы по 60 мл", glaze:"Фарфор с прозрачной глазурью", price:11500, st:"stock", img:"tea-milk", fx:52, fy:50, z:1,
+      alt:"Белая гайвань и пиалы на тёмном фоне",
+      desc:"Тонкая кромка фарфора просвечивает на свет. В коробке из крафта: гайвань и шесть пиал." },
+    { id:"lagoon-bowl", short:"Ø 11 см", col:"frost", name:"Пиала «Лагуна»", type:"Пиала", size:"Ø 11 см · 350 мл", glaze:"Бирюзовый селадон с кракле", price:3200, st:"stock", img:"bowl-lagoon", fx:50, fy:44, z:1.1,
+      alt:"Бирюзовая пиала на тёмной глянцевой поверхности с отражением",
+      desc:"Прозрачная бирюзовая глазурь собирается у дна гуще. Сетка кракле не брак, а след остывания: от чая она проступает." },
+    { id:"frost-dish", short:"Ø 28 см", col:"frost", name:"Блюдо «Иней»", type:"Блюдо", size:"Ø 28 см · борт с насечкой", glaze:"Зольная, тёплый белый", price:4200, st:"order", img:"plate-frost", fx:50, fy:55, z:1,
+      alt:"Белое керамическое блюдо с рельефным бортом на тёмном фоне",
+      desc:"Борт насекаем вручную стекой, поэтому рисунок на каждом блюде свой. Подходит для сервировки дома и в заведении." },
+    { id:"ring-vase", short:"22 см", col:"frost", name:"Ваза «Кольцо»", type:"Ваза", size:"22 см · горло 4 см", glaze:"Матовая светлая, внутри глазурь", care:"Мыть руками", price:5600, st:"stock", img:"vase-ring", fx:55, fy:75, z:1,
+      alt:"Светлая керамическая ваза-кольцо с сухой веткой на тёмном фоне",
+      desc:"Кольцо держит одну ветку, как в японской икебане. Внутри глазурь, вода не просачивается." },
+
+    { id:"ochre-pot", short:"400 мл", col:"ochre", name:"Чайник «Охра»", type:"Чайник", size:"400 мл", glaze:"Красная глина, охристый ангоб", price:7900, st:"stock", img:"teapot-ochre", fx:50, fy:55, z:1.15,
+      alt:"Оранжево-коричневый глиняный чайник на тёмно-зелёном фоне",
+      desc:"Красная глина обожжена до звона. Носик срезан под углом, поэтому чайник не капает." },
+    { id:"persimmon-bowl", short:"Ø 11 см", col:"ochre", name:"Пиала «Хурма»", type:"Пиала", size:"Ø 11 см · 300 мл", glaze:"Снаружи тёмная, внутри оранжевая", price:2900, st:"stock", img:"bowl-persimmon", fx:50, fy:55, z:1,
+      alt:"Пиала с оранжевой внутренней глазурью на тёмной поверхности",
+      desc:"Снаружи сдержанная, внутри цвета спелой хурмы. С рисом, чаем и супом смотрится по-разному." },
+    { id:"honey-cup", short:"200 мл", col:"ochre", name:"Чашка «Мёд»", type:"Чашка с блюдцем", size:"200 мл · блюдце Ø 14 см", glaze:"Тёплая охра, полуматовая", price:2600, st:"held", img:"cup-honey", fx:45, fy:45, z:1.4,
+      alt:"Чашка цвета мёда на блюдце, рядом клетчатая ткань, тёмный фон",
+      desc:"Ручка подогнана под большой и указательный пальцы. Эта чашка забронирована, но такую же можно сделать: она выйдет чуть иной." },
+    { id:"rib-vase", short:"14 см", col:"ochre", name:"Ваза «Ребро»", type:"Ваза", size:"14 см", glaze:"Оранжевая, рифлёная", care:"Мыть руками", price:3900, st:"order", img:"vase-rib", fx:50, fy:60, z:1.6,
+      alt:"Небольшая оранжевая рифлёная ваза на чёрном фоне",
+      desc:"Рёбра прорезаем по влажной глине вручную, каждое чуть отличается от соседнего." }
+  ];
+  var byId = function(id){ for(var i = 0; i < P.length; i++) if(P[i].id === id) return P[i]; return null; };
+  var wish = [], openId = null, lastFocus = null, inOrder = false;
+  var wantLabel = function(){ return "Хочу такую"; };
+
+  var cells = $("#cells");
+  cells.innerHTML = P.map(function(p){
+    return '<li class="cell" data-col="' + p.col + '">' +
+      '<button class="ph" type="button" data-open="' + p.id + '" aria-label="' + esc(p.name) + ': подробнее">' +
+        '<img src="img/' + p.img + '.jpg" alt="' + esc(p.alt) + '" loading="lazy" data-id="' + p.id + '">' +
+      '</button>' +
+      '<div class="meta">' +
+        '<div class="mrow"><h3>' + esc(p.name) + '</h3><span class="price">' + rub(p.price) + '</span></div>' +
+        '<p class="spec">' + esc(p.type) + ' · ' + esc(p.short) + '</p>' +
+        '<div class="mact"><span class="stat ' + p.st + '">' + ST[p.st] + '</span>' +
+          '<button class="want" type="button" data-want="' + p.id + '" aria-pressed="false">' + wantLabel(p) + '</button></div>' +
+      '</div></li>';
+  }).join("");
+
+  /* кадрирование каждого снимка: точка фокуса и масштаб задаём через CSSOM, а не атрибутом style */
+  $$(".ph img", cells).forEach(function(im){
+    var p = byId(im.getAttribute("data-id"));
+    im.style.setProperty("--fx", p.fx + "%");
+    im.style.setProperty("--fy", p.fy + "%");
+    im.style.setProperty("--z", p.z);
+  });
+
+  function applyFilter(c){
+    $$(".cell").forEach(function(li){ li.hidden = !(c === "all" || li.getAttribute("data-col") === c); });
+    $$(".chip").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-chip") === c ? "true" : "false"); });
+    var note = $("#colnote");
+    note.textContent = c === "all" ? ALLNOTE : COLS[c];
+    typo(note);
+  }
+
+  /* выбранные вещи */
+  function syncBar(){
+    var n = wish.length, bar = $("#wishbar");
+    bar.hidden = n === 0 || inOrder || !$("#pd").hidden;
+    $("#wishCount").textContent = "Выбрано: " + n + " " + plural(n, "вещь", "вещи", "вещей");
+    typo(bar);
+  }
+  function syncWish(){
+    $$("[data-want]").forEach(function(b){
+      var p = byId(b.getAttribute("data-want")), on = wish.indexOf(p.id) >= 0;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.textContent = on ? "Выбрано" : wantLabel(p);
+    });
+    if(openId){
+      var q = byId(openId), on2 = wish.indexOf(openId) >= 0;
+      $("#pdWant").textContent = on2 ? "Убрать из заявки" : wantLabel(q);
+    }
+    var box = $("#wish");
+    if(!wish.length){ box.hidden = true; box.innerHTML = ""; }
+    else {
+      box.hidden = false;
+      box.innerHTML = wish.map(function(id){
+        var p = byId(id);
+        return '<span class="wchip">' + esc(p.name) + ' — ' + rub(p.price) +
+          '<button type="button" data-unwish="' + id + '" aria-label="Убрать: ' + esc(p.name) + '">×</button></span>';
+      }).join("");
+      typo(box);
+    }
+    syncBar();
+  }
+  function toggleWish(id){
+    var i = wish.indexOf(id);
+    if(i >= 0) wish.splice(i, 1); else wish.push(id);
+    syncWish();
+  }
+
+  /* карточка вещи */
+  var pd = $("#pd");
+  function openPd(id){
+    var p = byId(id);
+    openId = id; lastFocus = document.activeElement;
+    $("#pdImg").src = "img/" + p.img + ".jpg";
+    $("#pdImg").alt = p.alt;
+    $("#pdName").textContent = p.name;
+    $("#pdPrice").textContent = rub(p.price);
+    var s = $("#pdStat"); s.className = "stat " + p.st; s.textContent = ST[p.st];
+    $("#pdDesc").textContent = p.desc;
+    var rows = [["Тип", p.type], ["Размер", p.size], ["Глазурь", p.glaze], ["Обжиг", "980 °C и 1 250 °C"], ["Уход", p.care || CARE]];
+    $("#pdSpec").innerHTML = rows.map(function(r){ return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join("");
+    $("#pdNote").textContent = NOTES[p.st];
+    pd.hidden = false;
+    document.documentElement.style.overflow = "hidden";
+    typo(pd); syncWish();
+    $("#pdClose").focus();
+  }
+  function closePd(){
+    if(pd.hidden) return;
+    pd.hidden = true; openId = null;
+    document.documentElement.style.overflow = "";
+    syncBar();
+    if(lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  /* заявка */
+  var form = $("#ask"), sent = $("#sent");
+  function prefill(topic, line){
+    form.hidden = false; sent.hidden = true;
+    var sel = $("#f-topic"), msg = $("#f-msg");
+    for(var i = 0; i < sel.options.length; i++) if(sel.options[i].text === topic){ sel.selectedIndex = i; break; }
+    line = plain(line);
+    if(msg.value.indexOf(line) < 0) msg.value = (msg.value ? msg.value.replace(/\s+$/, "") + "\n" : "") + line;
+  }
+  function goOrder(){ $("#order").scrollIntoView({ behavior: "smooth", block: "start" }); }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = $("#f-name").value.trim(), link = $("#f-link").value.trim(), err = $("#formErr");
+    if(name.length < 2 || link.length < 3){
+      err.innerHTML = '<p class="err" role="alert">Оставьте имя и способ связи, иначе мы не сможем ответить.</p>';
+      (name.length < 2 ? $("#f-name") : $("#f-link")).focus();
+      return;
+    }
+    err.innerHTML = "";
+    var lines = ["Заявка — «Глина и пепел»", "", "Что интересует: " + $("#f-topic").value, "Имя: " + name, "Связь: " + link];
+    if(wish.length) lines.push("Из коллекции: " + wish.map(function(id){ var p = byId(id); return p.name + " (" + rub(p.price) + ")"; }).join("; "));
+    var m = $("#f-msg").value.trim();
+    if(m) lines.push("Пожелания: " + m);
+    var text = plain(lines.join("\n"));
+    form.hidden = true; sent.hidden = false;
+    sent.innerHTML =
+      '<p class="ok">Спасибо, ' + esc(name) + '</p>' +
+      '<p>Заявка собрана. Скопируйте её и отправьте нам в Telegram или ВКонтакте: так мы сразу увидим, что вам нужно.</p>' +
+      '<pre id="askText">' + esc(text) + '</pre>' +
+      '<div class="pd-act"><button class="btn" type="button" id="copyBtn">Скопировать заявку</button><button class="btn ghost" type="button" id="editBtn">Изменить</button></div>';
+    typo(sent);
+    $("#copyBtn").addEventListener("click", function(){
+      var btn = this;
+      var done = function(){ btn.textContent = "Скопировано"; setTimeout(function(){ btn.textContent = "Скопировать заявку"; }, 2200); };
+      var fallback = function(){
+        var pre = $("#askText"), r = document.createRange();
+        r.selectNodeContents(pre);
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        btn.textContent = "Выделено — скопируйте";
+      };
+      try{ navigator.clipboard.writeText(text).then(done, fallback); }catch(x){ fallback(); }
+    });
+    $("#editBtn").addEventListener("click", function(){ sent.hidden = true; form.hidden = false; });
+  });
+
+  /* расчёт серии для заведения */
+  var UNIT = { bowl: 1250, plate: 1950, mug: 1450, pair: 2300 };
+  var KIND = { bowl: "Пиалы, Ø 12 см", plate: "Тарелки, Ø 26 см", mug: "Кружки, 300 мл", pair: "Чайные пары" };
+  var kind = "plate", calcNow = null;
+  function calc(){
+    var q = +$("#qty").value, stamp = $("#stamp").checked;
+    var disc = q >= 200 ? .16 : q >= 100 ? .12 : q >= 50 ? .08 : 0;
+    var unit = Math.round(UNIT[kind] * (1 - disc) / 10) * 10;
+    var total = unit * q + (stamp ? 8000 : 0);
+    var weeks = q <= 40 ? 4 : q <= 100 ? 5 : q <= 200 ? 6 : 8;
+    $("#qtyOut").textContent = q + " шт.";
+    $("#total").textContent = "≈ " + rub(total);
+    $("#per").textContent = rub(unit) + " за штуку" + (disc ? ", скидка за тираж " + Math.round(disc * 100) + " %" : "") + (stamp ? ", клеймо считаем отдельно" : "");
+    $("#weeks").textContent = "Срок: около " + weeks + " " + plural(weeks, "недели", "недель", "недель");
+    typo($(".out"));
+    typo($("#qtyOut"));
+    calcNow = "Расчёт серии: " + KIND[kind] + ", " + q + " шт., клеймо: " + (stamp ? "да" : "нет") + ". Ориентировочно " + rub(total) + ", около " + weeks + " нед.";
+  }
+  $("#seg").addEventListener("click", function(e){
+    var b = e.target.closest("button[data-k]"); if(!b) return;
+    kind = b.getAttribute("data-k");
+    $$("#seg button").forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    calc();
+  });
+  $("#qty").addEventListener("input", calc);
+  $("#stamp").addEventListener("change", calc);
+  $("#calcGo").addEventListener("click", function(){ prefill("Посуда для заведения", calcNow); });
+
+  /* расписание: даты считаются от сегодняшнего дня, чтобы не устаревали */
+  var MONTHS = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+  var DOW = ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"];
+  var now = new Date();
+  var shift = function(d, n){ return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); };
+  var nextDow = function(dow, minDays){ var d = shift(now, minDays); while(d.getDay() !== dow) d = shift(d, 1); return d; };
+  var label = function(d){ return d.getDate() + " " + MONTHS[d.getMonth()]; };
+  var base = nextDow(6, 2);
+  var SESS = [
+    { d: base,           t: "12:00—15:00", n: "Первая чаша на круге",      s: "Центровка, форма, глазурь на выбор",   p: 3200, seats: 2 },
+    { d: shift(base, 1), t: "17:00—20:00", n: "Чайный вечер: лепим пиалы", s: "Ручная лепка без круга, чай в перерыве", p: 2800, seats: 4 },
+    { d: shift(base, 6), t: "19:00—22:00", n: "Вечер на двоих",             s: "Два круга рядом, чай и сладкое, цена за двоих", p: 6500, seats: 0 },
+    { d: shift(base, 7), t: "12:00—15:00", n: "Роспись и глазурь",          s: "Работаете с вещами после первого обжига", p: 2400, seats: 3 },
+    { d: shift(base,14), t: "12:00—15:00", n: "Первая чаша на круге",      s: "Центровка, форма, глазурь на выбор",   p: 3200, seats: 6 }
+  ];
+  $("#sched").innerHTML = SESS.map(function(x, i){
+    var full = x.seats === 0;
+    return '<li class="sess' + (full ? ' full' : '') + '">' +
+      '<div class="d">' + DOW[x.d.getDay()] + ', ' + label(x.d) + '<small>' + x.t + '</small></div>' +
+      '<div class="n">' + esc(x.n) + '<small>' + esc(x.s) + '</small></div>' +
+      '<div class="pr">' + rub(x.p) + '</div>' +
+      '<div class="go"><button class="btn sm' + (full ? ' ghost' : '') + '" type="button" data-sess="' + i + '">' + (full ? 'В лист ожидания' : 'Записаться') + '</button>' +
+      '<small>' + (full ? 'Мест нет' : 'Осталось ' + x.seats + ' ' + plural(x.seats, "место", "места", "мест")) + '</small></div>' +
+    '</li>';
+  }).join("");
+  var courseStart = nextDow(2, 10);
+  $("#courseWhen").textContent = "Восемь занятий по три часа, в группе до шести человек. Ближайший набор с " + label(courseStart) +
+    ", по вторникам и четвергам в 19:00. К концу курса у вас 6—8 готовых вещей: чаши, кружка, тарелка и ваза.";
+  $("#courseGo").addEventListener("click", function(){ prefill("Курс", "Хочу на курс «Гончарный круг», набор с " + label(courseStart) + "."); });
+
+  /* общие обработчики */
+  document.addEventListener("click", function(e){
+    var t = e.target.closest ? e.target.closest("[data-open],[data-want],[data-unwish],[data-sess],[data-chip]") : null;
+    if(!t) return;
+    if(t.hasAttribute("data-open")) openPd(t.getAttribute("data-open"));
+    else if(t.hasAttribute("data-want")) toggleWish(t.getAttribute("data-want"));
+    else if(t.hasAttribute("data-unwish")) toggleWish(t.getAttribute("data-unwish"));
+    else if(t.hasAttribute("data-chip")) applyFilter(t.getAttribute("data-chip"));
+    else if(t.hasAttribute("data-sess")){
+      var x = SESS[+t.getAttribute("data-sess")];
+      prefill("Мастер-класс", (x.seats ? "Хочу на мастер-класс" : "Хочу в лист ожидания") + ": " + x.n + ", " + DOW[x.d.getDay()] + ", " + label(x.d) + ", " + x.t.split("—")[0] + ".");
+      goOrder();
+    }
+  });
+  $("#pdClose").addEventListener("click", closePd);
+  $("#pdBack").addEventListener("click", closePd);
+  $("#pdWant").addEventListener("click", function(){ if(openId) toggleWish(openId); });
+  pd.addEventListener("click", function(e){ if(e.target === pd) closePd(); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape") closePd(); });
+  $("#wishGo").addEventListener("click", function(){ prefill("Вещи из коллекции", ""); });
+
+  var top = $("#top"), burger = $("#burger");
+  burger.addEventListener("click", function(){
+    var on = top.classList.toggle("open");
+    burger.setAttribute("aria-expanded", on ? "true" : "false");
+  });
+  $$("#nav a").forEach(function(a){ a.addEventListener("click", function(){ top.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); }); });
+
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(function(es){ inOrder = es[0].isIntersecting; syncBar(); }, { threshold: .12 }).observe($("#order"));
+  }
+
+  applyFilter("all");
+  calc();
+  syncWish();
+  typo(document.body);
+})();
+</script>
+
+</body>
+</html>

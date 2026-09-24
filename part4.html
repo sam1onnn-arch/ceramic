@@ -1,0 +1,167 @@
+
+<section class="sec" id="classes">
+  <div class="wrap">
+    <div class="cl-grid">
+      <div>
+        <h2>Слепите свою чашу <em>за три часа</em></h2>
+        <p class="sub">Сами центруете глину и вытягиваете форму на гончарном круге. Готовую вещь забираете через три недели, после двух обжигов. Опыт не нужен, в группе до шести человек.</p>
+        <ul class="sched" id="sched"></ul>
+        <p class="incl">Глина, глазури, фартук и оба обжига входят в цену. Готовые вещи можно забрать в мастерской или мы отправим их по России.</p>
+      </div>
+      <figure class="cl-ph">
+        <img src="img/workshop.jpg" width="900" height="1350" loading="lazy" alt="Женщины за общим столом лепят из глины в светлой мастерской с деревянным потолком">
+      </figure>
+    </div>
+
+    <div class="course">
+      <img src="img/course-hands.jpg" width="1200" height="800" loading="lazy" alt="Мокрые руки формируют горшок на гончарном круге">
+      <div class="course-body">
+        <h3>Курс «Гончарный круг»: <em>восемь занятий</em></h3>
+        <p id="courseWhen"></p>
+        <ol class="prog">
+          <li>Центровка глины и первый цилиндр</li>
+          <li>Чаша: высота, толщина стенки, край</li>
+          <li>Кружка и ручка</li>
+          <li>Тарелка и плоские формы</li>
+          <li>Срезка донца и доводка после подсушки</li>
+          <li>Глазури: как угадать цвет до обжига</li>
+          <li>Ваза и крупная форма</li>
+          <li>Выдача обожжённых вещей и разбор работ</li>
+        </ol>
+        <div class="course-price"><b>24 000 ₽</b><span>или три платежа по 8 000 ₽ без переплат</span></div>
+        <div><a class="btn" id="courseGo" href="#order">Записаться на курс</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec deep" id="faq">
+  <div class="wrap faq-grid">
+    <div>
+      <h2>Что спрашивают <em>чаще всего</em></h2>
+      <p class="sub">Не нашли своё? Напишите, ответим в течение дня.</p>
+    </div>
+    <div class="qa">
+      <details open>
+        <summary>Можно ли мыть в посудомойке и греть в микроволновке?</summary>
+        <p>Да. Глазурь обожжена при 1 250 °C, она не пропускает воду и не боится нагрева. Не стоит только переносить вещь из холодильника на открытый огонь или в раскалённую духовку.</p>
+      </details>
+      <details>
+        <summary>Безопасна ли глазурь для еды?</summary>
+        <p>Внутри посуды только пищевые глазури, которые мы обжигаем до полного спекания. Декоративные глазури с медью и кобальтом кладём снаружи и на вазы.</p>
+      </details>
+      <details>
+        <summary>Почему вещь может отличаться от фото?</summary>
+        <p>Мы фотографируем ту самую вещь, которую отправим вам. Если делаем под заказ, форма и цвет будут близкими, а рисунок глазури новым: она всегда ведёт себя по-своему.</p>
+      </details>
+      <details>
+        <summary>Сколько ждать и можно ли повторить понравившуюся вещь?</summary>
+        <p>Вещи из наличия отправляем за два дня. Повтор или заказ под ваш размер занимает четыре недели: столько нужно на сушку и два обжига.</p>
+      </details>
+      <details>
+        <summary>Как вы упаковываете и что, если вещь разбилась в дороге?</summary>
+        <p>Оборачиваем плёнкой и крафтом, кладём в двойной короб. Если что-то приехало разбитым, снимите вскрытие посылки на видео: сделаем новую вещь или вернём деньги.</p>
+      </details>
+      <details>
+        <summary>Можно ли сделать по моему эскизу или с гравировкой?</summary>
+        <p>Да. Присылайте рисунок и размеры. Учтите усадку: глина сжимается на 12 %, поэтому после обжига вещь меньше, чем сырая. Надпись делаем на донце или по борту.</p>
+      </details>
+      <details>
+        <summary>Где забрать и как доставляете?</summary>
+        <p>Самовывоз из мастерской на Выборгской стороне по записи. По России отправляем СДЭК и Почтой России, при заказе от 10 000 ₽ доставка бесплатная.</p>
+      </details>
+    </div>
+  </div>
+</section>
+
+<section class="sec paper" id="order">
+  <div class="wrap ord-grid">
+    <div>
+      <h2>Расскажите, <em>что вам нужно</em></h2>
+      <p class="sub">Выберите вещи в коллекции, пришлите размеры для заведения или запишитесь на мастер-класс. Ответим в течение дня.</p>
+      <div class="wish" id="wish" hidden></div>
+      <form id="ask" novalidate>
+        <div id="formErr"></div>
+        <div class="two">
+          <div class="field"><label for="f-name">Имя</label><input id="f-name" name="name" type="text" autocomplete="name"></div>
+          <div class="field"><label for="f-link">Telegram или телефон</label><input id="f-link" name="link" type="text" autocomplete="off"></div>
+        </div>
+        <div class="field">
+          <label for="f-topic">Что интересует</label>
+          <select id="f-topic" name="topic">
+            <option>Вещи из коллекции</option>
+            <option>Посуда для заведения</option>
+            <option>Корпоративные подарки</option>
+            <option>Свадьба или подарок</option>
+            <option>Мастер-класс</option>
+            <option>Курс</option>
+            <option>Другое</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="f-msg">Пожелания</label>
+          <textarea id="f-msg" name="msg" rows="4" placeholder="Размеры, сроки, цвет глазури, повод"></textarea>
+        </div>
+        <button class="btn" type="submit">Собрать заявку</button>
+      </form>
+      <div class="sent" id="sent" hidden></div>
+    </div>
+    <div class="ord-side">
+      <img src="img/tea-table.jpg" width="1800" height="1200" loading="lazy" alt="Чайный столик с тёмными чашками, чайниками и большой чашей в свете из окна">
+      <dl class="info">
+        <div><dt>Где</dt><dd>Санкт-Петербург, Выборгская сторона. Вход со двора, точный адрес пришлём после записи</dd></div>
+        <div><dt>Когда</dt><dd>Пн—сб, 12:00—20:00. Самовывоз и мастер-классы по записи</dd></div>
+        <div><dt>Доставка</dt><dd>По России — СДЭК и Почта России. При заказе от 10 000 ₽ доставка бесплатная</dd></div>
+        <div><dt>Связь</dt><dd><div class="soc"><button class="btn ghost sm" type="button">Telegram</button><button class="btn ghost sm" type="button">ВКонтакте</button><button class="btn ghost sm" type="button">WhatsApp</button></div></dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="foot-in">
+      <div>
+        <a class="mark" href="#top" aria-label="Глина и пепел — в начало страницы">
+          <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M16 3.2a12.8 12.8 0 1 0 11.6 7.4" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>
+          <span><b>ГЛИНА</b> <i>и&nbsp;пепел</i></span>
+        </a>
+        <p>Керамика ручной работы. Санкт-Петербург</p>
+      </div>
+      <nav class="foot-nav" aria-label="Разделы в подвале">
+        <a href="#collection">Коллекция</a>
+        <a href="#about">Мастерская</a>
+        <a href="#venues">Для заведений</a>
+        <a href="#classes">Мастер-классы</a>
+        <a href="#faq">Вопросы</a>
+        <a href="#order">Заявка</a>
+      </nav>
+    </div>
+    <p class="legal">© 2026 Глина и пепел</p>
+  </div>
+</footer>
+
+<div class="pd" id="pd" role="dialog" aria-modal="true" aria-labelledby="pdName" hidden>
+  <div class="pd-panel">
+    <button class="pd-x" id="pdClose" type="button" aria-label="Закрыть">×</button>
+    <figure class="pd-fig"><img id="pdImg" alt=""></figure>
+    <div class="pd-body">
+      <h3 id="pdName"></h3>
+      <p class="pd-price" id="pdPrice"></p>
+      <p class="stat" id="pdStat"></p>
+      <p id="pdDesc"></p>
+      <dl class="pd-spec" id="pdSpec"></dl>
+      <div class="pd-act">
+        <button class="btn" id="pdWant" type="button">Хочу такую</button>
+        <button class="btn ghost" id="pdBack" type="button">Вернуться к полке</button>
+      </div>
+      <p class="pd-note" id="pdNote"></p>
+    </div>
+  </div>
+</div>
+
+<div class="wishbar" id="wishbar" hidden>
+  <span id="wishCount"></span>
+  <a class="btn" href="#order" id="wishGo">К заявке</a>
+</div>

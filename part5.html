@@ -1,0 +1,330 @@
+
+<script>
+(function(){
+  "use strict";
+  var $  = function(s,r){ return (r||document).querySelector(s); };
+  var $$ = function(s,r){ return Array.prototype.slice.call((r||document).querySelectorAll(s)); };
+  var esc = function(s){ return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); };
+  var NB = "\xa0";
+  var num = function(n){ return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, NB); };
+  var rub = function(n){ return num(n) + NB + "₽"; };
+  var plural = function(n,a,b,c){ var m = n % 100, k = n % 10; if(m > 10 && m < 20) return c; if(k === 1) return a; if(k > 1 && k < 5) return b; return c; };
+  var plain = function(s){ return String(s).replace(/\xa0/g," "); };
+
+  /* русская типографика: неразрывные пробелы после коротких слов, перед тире, в числах */
+  var SHORT = "а|и|в|во|к|ко|с|со|у|о|об|на|по|за|из|от|до|не|ни|но|то|же|ли|бы|для|при|без|над|под|про|или|что|как|это";
+  var reShort = new RegExp("(^|[\\s(«„\xa0—-])(" + SHORT + ")[ \\t\\n]+(?=\\S)", "gi");
+  function typo(root){
+    var w = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode: function(n){
+      var p = n.parentNode && n.parentNode.nodeName;
+      if(p === "SCRIPT" || p === "STYLE" || p === "TEXTAREA" || p === "PRE" || p === "OPTION") return NodeFilter.FILTER_REJECT;
+      return n.nodeValue && n.nodeValue.trim() ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+    }});
+    var list = [], n;
+    while((n = w.nextNode())) list.push(n);
+    list.forEach(function(t){
+      var o = t.nodeValue, s = o;
+      s = s.replace(/[ ]+—/g, NB + "—");
+      s = s.replace(/[ ]·[ ]/g, NB + "· ");
+      s = s.replace(/(\S)—(?=\S)/g, "$1\u2060—\u2060");
+      s = s.replace(reShort, "$1$2" + NB).replace(reShort, "$1$2" + NB);
+      s = s.replace(/(\d)[ ](?=\d{3}(?!\d))/g, "$1" + NB);
+      s = s.replace(/(\d)[ ](?=[₽%°A-Za-zА-Яа-яЁё])/g, "$1" + NB);
+      s = s.replace(/Ø[ ]/g, "Ø" + NB);
+      if(s !== o) t.nodeValue = s;
+    });
+  }
+
+  /* каталог */
+  var COLS = {
+    night: "Тёмные глазури: тэммоку, масляные пятна и чёрная глина без глазури снаружи.",
+    frost: "Холодные глазури: белый фарфор, бирюзовый селадон и зольная белая.",
+    ochre: "Тёплые глазури: красная глина, охра и оранжевый цвет спелой хурмы."
+  };
+  var ALLNOTE = "Три коллекции, названные по цвету глазури. В каждой по четыре вещи.";
+  var ST = { stock: "В наличии", order: "Под заказ", held: "Забронирована" };
+  var NOTES = {
+    stock: "Отправим в течение двух дней. Упакуем в двойной короб.",
+    order: "Под заказ: сделаем за три недели. Форма и цвет будут близкими, рисунок глазури новым.",
+    held:  "Вещь забронирована. Можем сделать такую же за три недели: форма та же, глазурь ляжет иначе."
+  };
+  var CARE = "Можно в посудомойке и микроволновке";
+  var P = [
+    { id:"night-bowl", short:"Ø 12 см", col:"night", name:"Чаша «Ночь»", type:"Чаша для матчи", size:"Ø 12 см · 320 мл", glaze:"Тэммоку: тёмная железная глазурь, к краю светлеет до бронзы", price:6400, st:"stock", img:"bowl-night", fx:50, fy:78, z:1.9,
+      alt:"Небольшая чёрная чаша на тёмном градиентном фоне",
+      desc:"Тёмная глазурь на краю светлеет до бронзы. Чаша ложится в две ладони и долго держит тепло." },
+    { id:"heat-bowl", short:"Ø 13 см", col:"night", name:"Чаша «Жар»", type:"Чаша для чая", size:"Ø 13 см · 280 мл", glaze:"Масляные пятна: красно-коричневые капли на чёрном", price:5800, st:"order", img:"bowl-heat", fx:60, fy:62, z:1,
+      alt:"Тёмная чаша с красно-коричневыми пятнами глазури",
+      desc:"Капли железа всплывают на поверхность в печи, поэтому рисунок нельзя повторить. Сделаем новую чашу с другими пятнами." },
+    { id:"ink-pot", short:"350 мл", col:"night", name:"Чайник «Тушь»", type:"Чайник с пиалой", size:"350 мл · пиала 90 мл", glaze:"Тёмная шамотная глина, снаружи без глазури", care:"Мыть тёплой водой без моющего средства", price:8600, st:"stock", img:"teapot-ink", fx:56, fy:50, z:1,
+      alt:"Тёмный глиняный чайник и пиала на резном деревянном подносе",
+      desc:"Снаружи глина без глазури: от чая она со временем темнеет и становится глубже. Крышка притёрта к горлу и не гремит." },
+    { id:"soot-plate", short:"Ø 26 см", col:"night", name:"Тарелка «Сажа»", type:"Тарелка", size:"Ø 26 см · глубина 3 см", glaze:"Матовая чёрная", price:3400, st:"order", img:"plate-soot", fx:50, fy:50, z:1,
+      alt:"Чёрная матовая тарелка на тёмной серой поверхности",
+      desc:"Ровный матовый борт и широкое дно: рыба и хлеб на ней смотрятся одинаково хорошо. В серии из шести тарелки одного размера, но каждая своего оттенка." },
+
+    { id:"milk-set", short:"150 мл", col:"frost", name:"Набор «Молоко»", type:"Гайвань и 6 пиал", size:"гайвань 150 мл · пиалы по 60 мл", glaze:"Фарфор с прозрачной глазурью", price:11500, st:"stock", img:"tea-milk", fx:52, fy:50, z:1,
+      alt:"Белая гайвань и пиалы на тёмном фоне",
+      desc:"Тонкая кромка фарфора просвечивает на свет. В коробке из крафта: гайвань и шесть пиал." },
+    { id:"lagoon-bowl", short:"Ø 11 см", col:"frost", name:"Пиала «Лагуна»", type:"Пиала", size:"Ø 11 см · 350 мл", glaze:"Бирюзовый селадон с кракле", price:3200, st:"stock", img:"bowl-lagoon", fx:50, fy:44, z:1.1,
+      alt:"Бирюзовая пиала на тёмной глянцевой поверхности с отражением",
+      desc:"Прозрачная бирюзовая глазурь собирается у дна гуще. Сетка кракле не брак, а след остывания: от чая она проступает." },
+    { id:"frost-dish", short:"Ø 28 см", col:"frost", name:"Блюдо «Иней»", type:"Блюдо", size:"Ø 28 см · борт с насечкой", glaze:"Зольная, тёплый белый", price:4200, st:"order", img:"plate-frost", fx:50, fy:55, z:1,
+      alt:"Белое керамическое блюдо с рельефным бортом на тёмном фоне",
+      desc:"Борт насекаем вручную стекой, поэтому рисунок на каждом блюде свой. Подходит для сервировки дома и в заведении." },
+    { id:"ring-vase", short:"22 см", col:"frost", name:"Ваза «Кольцо»", type:"Ваза", size:"22 см · горло 4 см", glaze:"Матовая светлая, внутри глазурь", care:"Мыть руками", price:5600, st:"stock", img:"vase-ring", fx:55, fy:75, z:1,
+      alt:"Светлая керамическая ваза-кольцо с сухой веткой на тёмном фоне",
+      desc:"Кольцо держит одну ветку, как в японской икебане. Внутри глазурь, вода не просачивается." },
+
+    { id:"ochre-pot", short:"400 мл", col:"ochre", name:"Чайник «Охра»", type:"Чайник", size:"400 мл", glaze:"Красная глина, охристый ангоб", price:7900, st:"stock", img:"teapot-ochre", fx:50, fy:55, z:1.15,
+      alt:"Оранжево-коричневый глиняный чайник на тёмно-зелёном фоне",
+      desc:"Красная глина обожжена до звона. Носик срезан под углом, поэтому чайник не капает." },
+    { id:"persimmon-bowl", short:"Ø 11 см", col:"ochre", name:"Пиала «Хурма»", type:"Пиала", size:"Ø 11 см · 300 мл", glaze:"Снаружи тёмная, внутри оранжевая", price:2900, st:"stock", img:"bowl-persimmon", fx:50, fy:55, z:1,
+      alt:"Пиала с оранжевой внутренней глазурью на тёмной поверхности",
+      desc:"Снаружи сдержанная, внутри цвета спелой хурмы. С рисом, чаем и супом смотрится по-разному." },
+    { id:"honey-cup", short:"200 мл", col:"ochre", name:"Чашка «Мёд»", type:"Чашка с блюдцем", size:"200 мл · блюдце Ø 14 см", glaze:"Тёплая охра, полуматовая", price:2600, st:"held", img:"cup-honey", fx:45, fy:45, z:1.4,
+      alt:"Чашка цвета мёда на блюдце, рядом клетчатая ткань, тёмный фон",
+      desc:"Ручка подогнана под большой и указательный пальцы. Эта чашка забронирована, но такую же можно сделать: она выйдет чуть иной." },
+    { id:"rib-vase", short:"14 см", col:"ochre", name:"Ваза «Ребро»", type:"Ваза", size:"14 см", glaze:"Оранжевая, рифлёная", care:"Мыть руками", price:3900, st:"order", img:"vase-rib", fx:50, fy:60, z:1.6,
+      alt:"Небольшая оранжевая рифлёная ваза на чёрном фоне",
+      desc:"Рёбра прорезаем по влажной глине вручную, каждое чуть отличается от соседнего." }
+  ];
+  var byId = function(id){ for(var i = 0; i < P.length; i++) if(P[i].id === id) return P[i]; return null; };
+  var wish = [], openId = null, lastFocus = null, inOrder = false;
+  var wantLabel = function(){ return "Хочу такую"; };
+
+  var cells = $("#cells");
+  cells.innerHTML = P.map(function(p){
+    return '<li class="cell" data-col="' + p.col + '">' +
+      '<button class="ph" type="button" data-open="' + p.id + '" aria-label="' + esc(p.name) + ': подробнее">' +
+        '<img src="img/' + p.img + '.jpg" alt="' + esc(p.alt) + '" loading="lazy" data-id="' + p.id + '">' +
+      '</button>' +
+      '<div class="meta">' +
+        '<div class="mrow"><h3>' + esc(p.name) + '</h3><span class="price">' + rub(p.price) + '</span></div>' +
+        '<p class="spec">' + esc(p.type) + ' · ' + esc(p.short) + '</p>' +
+        '<div class="mact"><span class="stat ' + p.st + '">' + ST[p.st] + '</span>' +
+          '<button class="want" type="button" data-want="' + p.id + '" aria-pressed="false">' + wantLabel(p) + '</button></div>' +
+      '</div></li>';
+  }).join("");
+
+  /* кадрирование каждого снимка: точка фокуса и масштаб задаём через CSSOM, а не атрибутом style */
+  $$(".ph img", cells).forEach(function(im){
+    var p = byId(im.getAttribute("data-id"));
+    im.style.setProperty("--fx", p.fx + "%");
+    im.style.setProperty("--fy", p.fy + "%");
+    im.style.setProperty("--z", p.z);
+  });
+
+  function applyFilter(c){
+    $$(".cell").forEach(function(li){ li.hidden = !(c === "all" || li.getAttribute("data-col") === c); });
+    $$(".chip").forEach(function(b){ b.setAttribute("aria-pressed", b.getAttribute("data-chip") === c ? "true" : "false"); });
+    var note = $("#colnote");
+    note.textContent = c === "all" ? ALLNOTE : COLS[c];
+    typo(note);
+  }
+
+  /* выбранные вещи */
+  function syncBar(){
+    var n = wish.length, bar = $("#wishbar");
+    bar.hidden = n === 0 || inOrder || !$("#pd").hidden;
+    $("#wishCount").textContent = "Выбрано: " + n + " " + plural(n, "вещь", "вещи", "вещей");
+    typo(bar);
+  }
+  function syncWish(){
+    $$("[data-want]").forEach(function(b){
+      var p = byId(b.getAttribute("data-want")), on = wish.indexOf(p.id) >= 0;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+      b.textContent = on ? "Выбрано" : wantLabel(p);
+    });
+    if(openId){
+      var q = byId(openId), on2 = wish.indexOf(openId) >= 0;
+      $("#pdWant").textContent = on2 ? "Убрать из заявки" : wantLabel(q);
+    }
+    var box = $("#wish");
+    if(!wish.length){ box.hidden = true; box.innerHTML = ""; }
+    else {
+      box.hidden = false;
+      box.innerHTML = wish.map(function(id){
+        var p = byId(id);
+        return '<span class="wchip">' + esc(p.name) + ' — ' + rub(p.price) +
+          '<button type="button" data-unwish="' + id + '" aria-label="Убрать: ' + esc(p.name) + '">×</button></span>';
+      }).join("");
+      typo(box);
+    }
+    syncBar();
+  }
+  function toggleWish(id){
+    var i = wish.indexOf(id);
+    if(i >= 0) wish.splice(i, 1); else wish.push(id);
+    syncWish();
+  }
+
+  /* карточка вещи */
+  var pd = $("#pd");
+  function openPd(id){
+    var p = byId(id);
+    openId = id; lastFocus = document.activeElement;
+    $("#pdImg").src = "img/" + p.img + ".jpg";
+    $("#pdImg").alt = p.alt;
+    $("#pdName").textContent = p.name;
+    $("#pdPrice").textContent = rub(p.price);
+    var s = $("#pdStat"); s.className = "stat " + p.st; s.textContent = ST[p.st];
+    $("#pdDesc").textContent = p.desc;
+    var rows = [["Тип", p.type], ["Размер", p.size], ["Глазурь", p.glaze], ["Обжиг", "980 °C и 1 250 °C"], ["Уход", p.care || CARE]];
+    $("#pdSpec").innerHTML = rows.map(function(r){ return '<div><dt>' + r[0] + '</dt><dd>' + esc(r[1]) + '</dd></div>'; }).join("");
+    $("#pdNote").textContent = NOTES[p.st];
+    pd.hidden = false;
+    document.documentElement.style.overflow = "hidden";
+    typo(pd); syncWish();
+    $("#pdClose").focus();
+  }
+  function closePd(){
+    if(pd.hidden) return;
+    pd.hidden = true; openId = null;
+    document.documentElement.style.overflow = "";
+    syncBar();
+    if(lastFocus && lastFocus.focus) lastFocus.focus();
+  }
+
+  /* заявка */
+  var form = $("#ask"), sent = $("#sent");
+  function prefill(topic, line){
+    form.hidden = false; sent.hidden = true;
+    var sel = $("#f-topic"), msg = $("#f-msg");
+    for(var i = 0; i < sel.options.length; i++) if(sel.options[i].text === topic){ sel.selectedIndex = i; break; }
+    line = plain(line);
+    if(msg.value.indexOf(line) < 0) msg.value = (msg.value ? msg.value.replace(/\s+$/, "") + "\n" : "") + line;
+  }
+  function goOrder(){ $("#order").scrollIntoView({ behavior: "smooth", block: "start" }); }
+
+  form.addEventListener("submit", function(e){
+    e.preventDefault();
+    var name = $("#f-name").value.trim(), link = $("#f-link").value.trim(), err = $("#formErr");
+    if(name.length < 2 || link.length < 3){
+      err.innerHTML = '<p class="err" role="alert">Оставьте имя и способ связи, иначе мы не сможем ответить.</p>';
+      (name.length < 2 ? $("#f-name") : $("#f-link")).focus();
+      return;
+    }
+    err.innerHTML = "";
+    var lines = ["Заявка — «Глина и пепел»", "", "Что интересует: " + $("#f-topic").value, "Имя: " + name, "Связь: " + link];
+    if(wish.length) lines.push("Из коллекции: " + wish.map(function(id){ var p = byId(id); return p.name + " (" + rub(p.price) + ")"; }).join("; "));
+    var m = $("#f-msg").value.trim();
+    if(m) lines.push("Пожелания: " + m);
+    var text = plain(lines.join("\n"));
+    form.hidden = true; sent.hidden = false;
+    sent.innerHTML =
+      '<p class="ok">Спасибо, ' + esc(name) + '</p>' +
+      '<p>Заявка собрана. Скопируйте её и отправьте нам в Telegram или ВКонтакте: так мы сразу увидим, что вам нужно.</p>' +
+      '<pre id="askText">' + esc(text) + '</pre>' +
+      '<div class="pd-act"><button class="btn" type="button" id="copyBtn">Скопировать заявку</button><button class="btn ghost" type="button" id="editBtn">Изменить</button></div>';
+    typo(sent);
+    $("#copyBtn").addEventListener("click", function(){
+      var btn = this;
+      var done = function(){ btn.textContent = "Скопировано"; setTimeout(function(){ btn.textContent = "Скопировать заявку"; }, 2200); };
+      var fallback = function(){
+        var pre = $("#askText"), r = document.createRange();
+        r.selectNodeContents(pre);
+        var sel = window.getSelection(); sel.removeAllRanges(); sel.addRange(r);
+        btn.textContent = "Выделено — скопируйте";
+      };
+      try{ navigator.clipboard.writeText(text).then(done, fallback); }catch(x){ fallback(); }
+    });
+    $("#editBtn").addEventListener("click", function(){ sent.hidden = true; form.hidden = false; });
+  });
+
+  /* расчёт серии для заведения */
+  var UNIT = { bowl: 1250, plate: 1950, mug: 1450, pair: 2300 };
+  var KIND = { bowl: "Пиалы, Ø 12 см", plate: "Тарелки, Ø 26 см", mug: "Кружки, 300 мл", pair: "Чайные пары" };
+  var kind = "plate", calcNow = null;
+  function calc(){
+    var q = +$("#qty").value, stamp = $("#stamp").checked;
+    var disc = q >= 200 ? .16 : q >= 100 ? .12 : q >= 50 ? .08 : 0;
+    var unit = Math.round(UNIT[kind] * (1 - disc) / 10) * 10;
+    var total = unit * q + (stamp ? 8000 : 0);
+    var weeks = q <= 40 ? 4 : q <= 100 ? 5 : q <= 200 ? 6 : 8;
+    $("#qtyOut").textContent = q + " шт.";
+    $("#total").textContent = "≈ " + rub(total);
+    $("#per").textContent = rub(unit) + " за штуку" + (disc ? ", скидка за тираж " + Math.round(disc * 100) + " %" : "") + (stamp ? ", клеймо считаем отдельно" : "");
+    $("#weeks").textContent = "Срок: около " + weeks + " " + plural(weeks, "недели", "недель", "недель");
+    typo($(".out"));
+    typo($("#qtyOut"));
+    calcNow = "Расчёт серии: " + KIND[kind] + ", " + q + " шт., клеймо: " + (stamp ? "да" : "нет") + ". Ориентировочно " + rub(total) + ", около " + weeks + " нед.";
+  }
+  $("#seg").addEventListener("click", function(e){
+    var b = e.target.closest("button[data-k]"); if(!b) return;
+    kind = b.getAttribute("data-k");
+    $$("#seg button").forEach(function(x){ x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+    calc();
+  });
+  $("#qty").addEventListener("input", calc);
+  $("#stamp").addEventListener("change", calc);
+  $("#calcGo").addEventListener("click", function(){ prefill("Посуда для заведения", calcNow); });
+
+  /* расписание: даты считаются от сегодняшнего дня, чтобы не устаревали */
+  var MONTHS = ["января","февраля","марта","апреля","мая","июня","июля","августа","сентября","октября","ноября","декабря"];
+  var DOW = ["Вс","Пн","Вт","Ср","Чт","Пт","Сб"];
+  var now = new Date();
+  var shift = function(d, n){ return new Date(d.getFullYear(), d.getMonth(), d.getDate() + n); };
+  var nextDow = function(dow, minDays){ var d = shift(now, minDays); while(d.getDay() !== dow) d = shift(d, 1); return d; };
+  var label = function(d){ return d.getDate() + " " + MONTHS[d.getMonth()]; };
+  var base = nextDow(6, 2);
+  var SESS = [
+    { d: base,           t: "12:00—15:00", n: "Первая чаша на круге",      s: "Центровка, форма, глазурь на выбор",   p: 3200, seats: 2 },
+    { d: shift(base, 1), t: "17:00—20:00", n: "Чайный вечер: лепим пиалы", s: "Ручная лепка без круга, чай в перерыве", p: 2800, seats: 4 },
+    { d: shift(base, 6), t: "19:00—22:00", n: "Вечер на двоих",             s: "Два круга рядом, чай и сладкое, цена за двоих", p: 6500, seats: 0 },
+    { d: shift(base, 7), t: "12:00—15:00", n: "Роспись и глазурь",          s: "Работаете с вещами после первого обжига", p: 2400, seats: 3 },
+    { d: shift(base,14), t: "12:00—15:00", n: "Первая чаша на круге",      s: "Центровка, форма, глазурь на выбор",   p: 3200, seats: 6 }
+  ];
+  $("#sched").innerHTML = SESS.map(function(x, i){
+    var full = x.seats === 0;
+    return '<li class="sess' + (full ? ' full' : '') + '">' +
+      '<div class="d">' + DOW[x.d.getDay()] + ', ' + label(x.d) + '<small>' + x.t + '</small></div>' +
+      '<div class="n">' + esc(x.n) + '<small>' + esc(x.s) + '</small></div>' +
+      '<div class="pr">' + rub(x.p) + '</div>' +
+      '<div class="go"><button class="btn sm' + (full ? ' ghost' : '') + '" type="button" data-sess="' + i + '">' + (full ? 'В лист ожидания' : 'Записаться') + '</button>' +
+      '<small>' + (full ? 'Мест нет' : 'Осталось ' + x.seats + ' ' + plural(x.seats, "место", "места", "мест")) + '</small></div>' +
+    '</li>';
+  }).join("");
+  var courseStart = nextDow(2, 10);
+  $("#courseWhen").textContent = "Восемь занятий по три часа, в группе до шести человек. Ближайший набор с " + label(courseStart) +
+    ", по вторникам и четвергам в 19:00. К концу курса у вас 6—8 готовых вещей: чаши, кружка, тарелка и ваза.";
+  $("#courseGo").addEventListener("click", function(){ prefill("Курс", "Хочу на курс «Гончарный круг», набор с " + label(courseStart) + "."); });
+
+  /* общие обработчики */
+  document.addEventListener("click", function(e){
+    var t = e.target.closest ? e.target.closest("[data-open],[data-want],[data-unwish],[data-sess],[data-chip]") : null;
+    if(!t) return;
+    if(t.hasAttribute("data-open")) openPd(t.getAttribute("data-open"));
+    else if(t.hasAttribute("data-want")) toggleWish(t.getAttribute("data-want"));
+    else if(t.hasAttribute("data-unwish")) toggleWish(t.getAttribute("data-unwish"));
+    else if(t.hasAttribute("data-chip")) applyFilter(t.getAttribute("data-chip"));
+    else if(t.hasAttribute("data-sess")){
+      var x = SESS[+t.getAttribute("data-sess")];
+      prefill("Мастер-класс", (x.seats ? "Хочу на мастер-класс" : "Хочу в лист ожидания") + ": " + x.n + ", " + DOW[x.d.getDay()] + ", " + label(x.d) + ", " + x.t.split("—")[0] + ".");
+      goOrder();
+    }
+  });
+  $("#pdClose").addEventListener("click", closePd);
+  $("#pdBack").addEventListener("click", closePd);
+  $("#pdWant").addEventListener("click", function(){ if(openId) toggleWish(openId); });
+  pd.addEventListener("click", function(e){ if(e.target === pd) closePd(); });
+  document.addEventListener("keydown", function(e){ if(e.key === "Escape") closePd(); });
+  $("#wishGo").addEventListener("click", function(){ prefill("Вещи из коллекции", ""); });
+
+  var top = $("#top"), burger = $("#burger");
+  burger.addEventListener("click", function(){
+    var on = top.classList.toggle("open");
+    burger.setAttribute("aria-expanded", on ? "true" : "false");
+  });
+  $$("#nav a").forEach(function(a){ a.addEventListener("click", function(){ top.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); }); });
+
+  if("IntersectionObserver" in window){
+    new IntersectionObserver(function(es){ inOrder = es[0].isIntersecting; syncBar(); }, { threshold: .12 }).observe($("#order"));
+  }
+
+  applyFilter("all");
+  calc();
+  syncWish();
+  typo(document.body);
+})();
+</script>
